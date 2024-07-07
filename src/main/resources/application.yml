@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: shorter
+  datasource:
+    url: jdbc:postgresql://localhost:5432/short_url
+    username: postgres
+    password: 112004
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
