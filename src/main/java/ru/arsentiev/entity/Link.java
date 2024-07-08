@@ -10,7 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "links")
+@Entity
+@Table(name = "links")
 public class Link {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

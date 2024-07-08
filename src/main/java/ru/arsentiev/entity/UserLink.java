@@ -12,7 +12,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@Entity(name = "user_link")
+@Entity
+@Table(name = "user_link")
 public class UserLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

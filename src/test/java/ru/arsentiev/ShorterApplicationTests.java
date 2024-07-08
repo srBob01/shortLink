@@ -1,4 +1,4 @@
-package ru.arsentiev.shorter;
+package ru.arsentiev;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
