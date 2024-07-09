@@ -1,19 +1,20 @@
 package ru.arsentiev.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "users")
+@Getter
+@Setter
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,51 +32,15 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserLink> userLinks = new ArrayList<>();
 
-    public Integer getId() {
-        return this.id;
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof User user)) return false;
+        return Objects.equals(getId(), user.getId());
     }
 
-    public String getUsername() {
-        return this.username;
-    }
-
-    public String getEmail() {
-        return this.email;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public Role getRole() {
-        return this.role;
-    }
-
-    public List<UserLink> getUserLinks() {
-        return this.userLinks;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public void setUserLinks(List<UserLink> userLinks) {
-        this.userLinks = userLinks;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

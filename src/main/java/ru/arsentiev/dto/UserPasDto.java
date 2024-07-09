@@ -8,7 +8,6 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class UserLogPasDto {
-    private String email;
+public class UserPasDto {
     private String password;
 }

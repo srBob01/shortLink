@@ -1,17 +1,19 @@
 package ru.arsentiev.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "user_link")
+@Getter
+@Setter
+@ToString
 public class UserLink {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,43 +29,15 @@ public class UserLink {
     @Column(name = "remove_time")
     private LocalDateTime removeTime;
 
-    public void setId(Long id) {
-        this.id = id;
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof UserLink userLink)) return false;
+        return Objects.equals(getId(), userLink.getId());
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public void setLink(Link link) {
-        this.link = link;
-    }
-
-    public void setCreatedTime(LocalDateTime createdTime) {
-        this.createdTime = createdTime;
-    }
-
-    public void setRemoveTime(LocalDateTime removeTime) {
-        this.removeTime = removeTime;
-    }
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public Link getLink() {
-        return this.link;
-    }
-
-    public LocalDateTime getCreatedTime() {
-        return this.createdTime;
-    }
-
-    public LocalDateTime getRemoveTime() {
-        return this.removeTime;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

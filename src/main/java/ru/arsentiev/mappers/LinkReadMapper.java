@@ -10,9 +10,9 @@ import ru.arsentiev.entity.Link;
 public interface LinkReadMapper {
     LinkReadMapper INSTANCE = Mappers.getMapper(LinkReadMapper.class);
 
-    @Mapping(source = "category.id", target = "idCategory")
+    @Mapping(source = "category.title", target = "titleCategory")
     LinkReadDto linkToDto(Link link);
 
-    @Mapping(source = "idCategory", target = "category.id")
+    @Mapping(source = "titleCategory", target = "category.title")
     Link dtoToLink(LinkReadDto linkReadDto);
 }

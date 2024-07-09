@@ -12,5 +12,6 @@ public class LinkReadDto {
     private Long id;
     private String shortLink;
     private String longLink;
-    private Short idCategory;
+    private String titleCategory;
+
 }

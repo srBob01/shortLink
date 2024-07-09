@@ -1,14 +1,17 @@
 package ru.arsentiev.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
+@Getter
+@Setter
+@ToString
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,19 +19,15 @@ public class Category {
     @Column(nullable = false, unique = true)
     private String title;
 
-    public Short getId() {
-        return this.id;
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Category category)) return false;
+        return Objects.equals(getId(), category.getId());
     }
 
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setId(Short id) {
-        this.id = id;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }

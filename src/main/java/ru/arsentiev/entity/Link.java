@@ -5,12 +5,16 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Entity
 @Table(name = "links")
+@Getter
+@Setter
+@ToString
 public class Link {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,39 +30,15 @@ public class Link {
     @OneToMany(mappedBy = "link", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserLink> userLinks = new ArrayList<>();
 
-    public Long getId() {
-        return this.id;
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (!(object instanceof Link link)) return false;
+        return Objects.equals(getId(), link.getId());
     }
 
-    public String getShortLink() {
-        return this.shortLink;
-    }
-
-    public String getLongLink() {
-        return this.longLink;
-    }
-
-    public List<UserLink> getUserLinks() {
-        return this.userLinks;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setShortLink(String shortLink) {
-        this.shortLink = shortLink;
-    }
-
-    public void setLongLink(String longLink) {
-        this.longLink = longLink;
-    }
-
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-
-    public void setUserLinks(List<UserLink> userLinks) {
-        this.userLinks = userLinks;
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
