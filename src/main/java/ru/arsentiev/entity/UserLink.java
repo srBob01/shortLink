@@ -3,12 +3,10 @@ package ru.arsentiev.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -28,4 +26,44 @@ public class UserLink {
     private LocalDateTime createdTime;
     @Column(name = "remove_time")
     private LocalDateTime removeTime;
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public void setLink(Link link) {
+        this.link = link;
+    }
+
+    public void setCreatedTime(LocalDateTime createdTime) {
+        this.createdTime = createdTime;
+    }
+
+    public void setRemoveTime(LocalDateTime removeTime) {
+        this.removeTime = removeTime;
+    }
+
+    public Long getId() {
+        return this.id;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public Link getLink() {
+        return this.link;
+    }
+
+    public LocalDateTime getCreatedTime() {
+        return this.createdTime;
+    }
+
+    public LocalDateTime getRemoveTime() {
+        return this.removeTime;
+    }
 }

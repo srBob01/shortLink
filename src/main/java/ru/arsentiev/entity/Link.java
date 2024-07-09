@@ -6,7 +6,6 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -18,6 +17,7 @@ public class Link {
     private Long id;
     private String shortLink;
     private String longLink;
+    @Getter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_category")
     private Category category;
@@ -26,4 +26,39 @@ public class Link {
     @OneToMany(mappedBy = "link", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserLink> userLinks = new ArrayList<>();
 
+    public Long getId() {
+        return this.id;
+    }
+
+    public String getShortLink() {
+        return this.shortLink;
+    }
+
+    public String getLongLink() {
+        return this.longLink;
+    }
+
+    public List<UserLink> getUserLinks() {
+        return this.userLinks;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setShortLink(String shortLink) {
+        this.shortLink = shortLink;
+    }
+
+    public void setLongLink(String longLink) {
+        this.longLink = longLink;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setUserLinks(List<UserLink> userLinks) {
+        this.userLinks = userLinks;
+    }
 }
