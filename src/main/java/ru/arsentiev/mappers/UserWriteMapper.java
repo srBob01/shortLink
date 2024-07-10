@@ -14,6 +14,8 @@ public interface UserWriteMapper {
     default User dtoToUser(UserWriteDto userWriteDto, User user) {
         user.setEmail(userWriteDto.getEmail());
         user.setUsername(userWriteDto.getUsername());
+        user.setFirstName(userWriteDto.getFirstName());
+        user.setLastName(userWriteDto.getLastName());
         return user;
     }
 }

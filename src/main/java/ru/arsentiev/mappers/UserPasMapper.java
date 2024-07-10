@@ -11,4 +11,6 @@ public interface UserPasMapper {
 
     UserPasDto userToDto(User user);
 
+    User dtoToUser(UserPasDto user);
+
 }
