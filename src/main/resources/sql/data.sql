@@ -1,10 +1,10 @@
 -- Вставка пользователей
-INSERT INTO users (username, email, password, role)
-VALUES ('user1', 'user1@example.com', '1', 'USER'),
-       ('user2', 'user2@example.com', '1', 'USER'),
-       ('user3', 'user3@example.com', '1', 'USER'),
-       ('user4', 'user4@example.com', '1', 'USER'),
-       ('user5', 'user5@example.com', '1', 'USER');
+INSERT INTO users (username, email, password, firstname, lastname, role)
+VALUES ('user1', 'user1@example.com', '1','1_f', '1_l', 'USER'),
+       ('user2', 'user2@example.com', '2','2_f', '2_l', 'USER'),
+       ('user3', 'user3@example.com', '3','3_f', '3_l', 'USER'),
+       ('user4', 'user4@example.com', '4','4_f', '4_l', 'USER'),
+       ('user5', 'user5@example.com', '5','5_f', '5_l', 'USER');
 
 -- Вставка категорий
 INSERT INTO category (title)
