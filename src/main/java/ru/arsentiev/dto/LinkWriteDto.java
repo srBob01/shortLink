@@ -11,5 +11,6 @@ import lombok.*;
 public class LinkWriteDto {
     private String shortLink;
     private String longLink;
+    private String linkName;
     private CategoryReadDto categoryDto;
 }

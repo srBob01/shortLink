@@ -15,9 +15,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class LinkService {
-    private LinkRepository linkRepository;
-    private LinkReadMapper linkReadMapper;
-    private LinkWriteMapper linkWriteMapper;
+    private final LinkRepository linkRepository;
+    private final LinkReadMapper linkReadMapper;
+    private final LinkWriteMapper linkWriteMapper;
 
     @Transactional
     public LinkReadDto create(LinkWriteDto link) {

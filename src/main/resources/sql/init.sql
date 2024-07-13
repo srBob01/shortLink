@@ -18,6 +18,7 @@ CREATE TABLE category
 CREATE TABLE links
 (
     id          BIGSERIAL PRIMARY KEY,
+    link_name   TEXT                              NOT NULL,
     short_link  CHAR(10)                          NOT NULL,
     long_link   TEXT                              NOT NULL,
     id_category SMALLINT REFERENCES category (id) NOT NULL
@@ -33,16 +34,18 @@ CREATE TABLE user_link
     UNIQUE (id_user, id_link)
 );
 
-CREATE VIEW user_link_main_info AS
-SELECT ul.id,
-       u.username,
-       l.short_link,
-       c.title,
-       ul.created_time,
-       ul.remove_time,
-       c.id AS "id_category",
-       u.id AS "id_user"
-FROM user_link ul
-         JOIN links l on ul.id_link = l.id
-         JOIN public.category c on c.id = l.id_category
-         JOIN public.users u on u.id = ul.id_user;
+-- DROP VIEW user_link_main_info;
+--
+-- CREATE VIEW user_link_main_info AS
+-- SELECT ul.id,
+--        u.username,
+--        l.short_link,
+--        c.title,
+--        ul.created_time,
+--        ul.remove_time,
+--        c.id AS "id_category",
+--        u.id AS "id_user"
+-- FROM user_link ul
+--          JOIN links l on ul.id_link = l.id
+--          JOIN public.category c on c.id = l.id_category
+--          JOIN public.users u on u.id = ul.id_user;

@@ -1,5 +1,6 @@
 package ru.arsentiev.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,13 +20,20 @@ public class Link {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     private String shortLink;
+
     private String longLink;
-    @Getter
+
+    @Column(name = "link_name")
+    private String linkName;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_category")
     private Category category;
+
     @ToString.Exclude
+    @JsonIgnore
     @Builder.Default
     @OneToMany(mappedBy = "link", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<UserLink> userLinks = new ArrayList<>();

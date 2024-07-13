@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Users</title>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch('/api/users')
+                .then(response => response.json())
+                .then(users => {
+                    const usersContainer = document.getElementById('users-container');
+                    users.forEach(user => {
+                        const userElement = document.createElement('div');
+                        userElement.innerHTML = `<a href="/users/${user.id}">${user.id}. ${user.username}</a>`;
+                        usersContainer.appendChild(userElement);
+                    });
+                });
+        });
+    </script>
+</head>
+<body>
+<div id="users-container"></div>
+</body>
+</html>

@@ -1,30 +1,33 @@
 package ru.arsentiev.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import ru.arsentiev.dsl.UserFilter;
 import ru.arsentiev.dto.UserReadDto;
 import ru.arsentiev.dto.UserWriteDto;
-import ru.arsentiev.page.PageResponse;
 import ru.arsentiev.service.UserService;
 
+import java.util.List;
+
 @RestController
-@RequestMapping("api/v1/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserRestController {
-    private UserService userService;
+    private final UserService userService;
+
+//    @GetMapping
+//    public PageResponse<UserReadDto> findAll(/*UserFilter userFilter, */Pageable pageable) {
+//        Page<UserReadDto> page = userService.findAll(/*userFilter,*/ pageable);
+//        return PageResponse.of(page);
+//    }
 
     @GetMapping
-    public PageResponse<UserReadDto> findAll(UserFilter userFilter, Pageable pageable) {
-        Page<UserReadDto> page = userService.findAll(userFilter, pageable);
-        return PageResponse.of(page);
+    public List<UserReadDto> findAll() {
+        return userService.findAll();
     }
 
     @GetMapping("/{id}")
@@ -46,6 +49,7 @@ public class UserRestController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
     @DeleteMapping("/{id}")
     public void delete(@PathVariable("id") Integer id) {
         if (!userService.delete(id)) {

@@ -3,6 +3,7 @@ package ru.arsentiev.repository;
 import com.querydsl.jpa.impl.JPAQuery;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import ru.arsentiev.dsl.QPredicates;
 import ru.arsentiev.dsl.UserFilter;
 import ru.arsentiev.entity.User;
@@ -11,6 +12,7 @@ import java.util.List;
 
 import static ru.arsentiev.entity.QUser.user;
 
+@Repository
 @RequiredArgsConstructor
 public class FilterUserRepository {
     private final EntityManager entityManager;

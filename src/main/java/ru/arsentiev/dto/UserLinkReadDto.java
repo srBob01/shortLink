@@ -12,9 +12,8 @@ import java.time.LocalDateTime;
 @ToString
 public class UserLinkReadDto {
     private Long id;
-    private String username;
-    private String shortLink;
-    private String title;
+    private UserReadDto userDto;
+    private LinkReadDto linkDto;
     private LocalDateTime createdTime;
     private LocalDateTime removeTime;
 }
