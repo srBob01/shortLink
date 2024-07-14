@@ -20,28 +20,14 @@ VALUES ('Technology'),
        ('Science');
 
 
-INSERT INTO links (short_link, long_link, link_name, id_category)
-VALUES ('short1a', 'https://example.com/1a', '1', 1),
-       ('short1b', 'https://example.com/1b', '1', 1),
-       ('short2a', 'https://example.com/2a', '1', 2),
-       ('short2b', 'https://example.com/2b', '1', 2),
-       ('short3a', 'https://example.com/3a', '1', 3),
-       ('short3b', 'https://example.com/3b', '1', 3),
-       ('short4a', 'https://example.com/4a', '1', 4),
-       ('short4b', 'https://example.com/4b', '1', 4),
-       ('short5a', 'https://example.com/5a', '1', 5),
-       ('short5b', 'https://example.com/5b', '1', 5);
-
-
--- Вставка связей между пользователями и ссылками
-INSERT INTO user_link (id_link, id_user, remove_time)
-VALUES (1, 1, '2024-12-31 23:59:59'),
-       (2, 1, '2024-12-31 23:59:59'),
-       (3, 2, '2024-12-31 23:59:59'),
-       (4, 2, '2024-12-31 23:59:59'),
-       (5, 3, '2024-12-31 23:59:59'),
-       (6, 3, '2024-12-31 23:59:59'),
-       (7, 4, '2024-12-31 23:59:59'),
-       (8, 4, '2024-12-31 23:59:59'),
-       (9, 5, '2024-12-31 23:59:59'),
-       (10, 5, '2024-12-31 23:59:59');
+INSERT INTO links (short_link, long_link, link_name, id_category, id_user)
+VALUES ('short1a', 'https://example.com/1a', '1', 1, 1),
+       ('short1b', 'https://example.com/1b', '1', 1, 1),
+       ('short2a', 'https://example.com/2a', '1', 2, 2),
+       ('short2b', 'https://example.com/2b', '1', 2, 2),
+       ('short3a', 'https://example.com/3a', '1', 3, 3),
+       ('short3b', 'https://example.com/3b', '1', 3, 3),
+       ('short4a', 'https://example.com/4a', '1', 4, 4),
+       ('short4b', 'https://example.com/4b', '1', 4, 4),
+       ('short5a', 'https://example.com/5a', '1', 5, 5),
+       ('short5b', 'https://example.com/5b', '1', 5, 5);

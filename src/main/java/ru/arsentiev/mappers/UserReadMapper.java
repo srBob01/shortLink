@@ -7,8 +7,6 @@ import ru.arsentiev.entity.User;
 
 @Mapper(componentModel = "spring")
 public interface UserReadMapper {
-    UserReadMapper INSTANCE = Mappers.getMapper(UserReadMapper.class);
-
     UserReadDto userToDto(User user);
 
     User dtoToUser(UserReadDto userReadDto);

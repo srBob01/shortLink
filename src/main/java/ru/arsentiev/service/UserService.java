@@ -70,7 +70,7 @@ public class UserService implements UserDetailsService {
     @Transactional
     public Optional<UserReadDto> update(Integer id, UserWriteDto userDto) {
         return userRepository.findById(id)
-                .map(user -> userWriteMapper.dtoToUser(userDto, user))
+                .map(user -> userWriteMapper.dtoToUser(userDto, user.getId(), user.getPassword()))
                 .map(userRepository::saveAndFlush)
                 .map(userReadMapper::userToDto);
     }

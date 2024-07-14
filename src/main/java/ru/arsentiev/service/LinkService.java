@@ -31,7 +31,7 @@ public class LinkService {
     @Transactional
     public Optional<LinkReadDto> update(Long id, LinkWriteDto linkDto) {
         return linkRepository.findById(id)
-                .map(link -> linkWriteMapper.dtoToLink(linkDto, link))
+                .map(link -> linkWriteMapper.dtoToLink(linkDto, link.getId()))
                 .map(linkRepository::saveAndFlush)
                 .map(linkReadMapper::linkToDto);
     }

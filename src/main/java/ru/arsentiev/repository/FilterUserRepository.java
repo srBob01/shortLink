@@ -19,8 +19,10 @@ public class FilterUserRepository {
 
     public List<User> findAllByFilter(UserFilter filter) {
         var predicate = QPredicates.builder()
-                .add(filter.firstName(), user.firstName::containsIgnoreCase)
-                .add(filter.lastName(), user.lastName::containsIgnoreCase)
+                .add(filter.firstName(), user.firstName::equalsIgnoreCase)
+                .add(filter.lastName(), user.lastName::equalsIgnoreCase)
+                .add(filter.email(), user.email::containsIgnoreCase)
+                .add(filter.username(), user.username::equalsIgnoreCase)
                 .buildAnd();
 
         return new JPAQuery<User>(entityManager)

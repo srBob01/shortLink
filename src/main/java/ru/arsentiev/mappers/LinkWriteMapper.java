@@ -2,27 +2,39 @@ package ru.arsentiev.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.arsentiev.dto.LinkWriteDto;
-import ru.arsentiev.dto.UserWriteDto;
-import ru.arsentiev.entity.Category;
 import ru.arsentiev.entity.Link;
-import ru.arsentiev.entity.User;
+import ru.arsentiev.service.UrlShortenerService;
+
+import java.security.NoSuchAlgorithmException;
+import java.time.LocalDateTime;
 
 @Mapper(componentModel = "spring", uses = CategoryReadMapper.class)
-public interface LinkWriteMapper {
-    LinkWriteMapper INSTANCE = Mappers.getMapper(LinkWriteMapper.class);
+public abstract class LinkWriteMapper {
+    @Autowired
+    private UrlShortenerService urlShortenerService;
 
     @Mapping(source = "categoryDto", target = "category")
-    Link dtoToLink(LinkWriteDto linkWriteDto);
+    @Mapping(target = "removeDate", expression = "java(calculateRemoveDate(linkWriteDto.getValidHours()))")
+    @Mapping(target = "shortLink", expression = "java(generateShortLink(linkWriteDto))")
+    public abstract Link dtoToLink(LinkWriteDto linkWriteDto);
 
-    default Link dtoToLink(LinkWriteDto linkWriteDto, Link link) {
-        link.setLongLink(linkWriteDto.getLongLink());
-        link.setShortLink(linkWriteDto.getShortLink());
-        link.setCategory(Category.builder()
-                .id(linkWriteDto.getCategoryDto().getId())
-                .title(linkWriteDto.getCategoryDto().getTitle())
-                .build());
+    public Link dtoToLink(LinkWriteDto linkWriteDto, Long idLink) {
+        Link link = dtoToLink(linkWriteDto);
+        link.setId(idLink);
         return link;
+    }
+
+    protected LocalDateTime calculateRemoveDate(int validHours) {
+        return LocalDateTime.now().plusHours(validHours);
+    }
+
+    protected String generateShortLink(LinkWriteDto linkWriteDto) {
+        try {
+            return urlShortenerService.shortenUrl(linkWriteDto.getLongLink());
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("Error generating short link", e);
+        }
     }
 }
