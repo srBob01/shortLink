@@ -6,9 +6,11 @@ CREATE TABLE users
     username           TEXT UNIQUE NOT NULL,
     email              TEXT UNIQUE NOT NULL,
     password           TEXT        NOT NULL,
-    create_date        TIMESTAMP   NOT NULL DEFAULT now(),
+    create_date        TIMESTAMP,
     last_modified_date TIMESTAMP,
-    role               TEXT        NOT NULL DEFAULT 'USER'
+    enabled            boolean DEFAULT false,
+    account_locked     boolean DEFAULT false,
+    role               TEXT        NOT NULL
 );
 
 CREATE TABLE category
@@ -29,5 +31,16 @@ CREATE TABLE links
     id_category        SMALLINT REFERENCES category (id)
         ON DELETE SET NULL ON UPDATE CASCADE,
     id_user            INT REFERENCES users (id)
+        ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
+);
+
+CREATE TABLE tokens
+(
+    id           SERIAL PRIMARY KEY,
+    token        CHAR(6)                    NOT NULL,
+    created_at   TIMESTAMP,
+    expires_at   TIMESTAMP,
+    validated_at TIMESTAMP,
+    id_user      INT REFERENCES users (id)
         ON DELETE CASCADE ON UPDATE CASCADE NOT NULL
 );

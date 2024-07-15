@@ -1,6 +1,5 @@
 package ru.arsentiev.configuration;
 
-import com.querydsl.core.annotations.Config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

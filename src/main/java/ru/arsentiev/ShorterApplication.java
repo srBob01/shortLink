@@ -3,6 +3,7 @@ package ru.arsentiev;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.scheduling.annotation.EnableAsync;
 import ru.arsentiev.dto.CategoryReadDto;
 import ru.arsentiev.dto.LinkWriteDto;
 import ru.arsentiev.dto.UserReadDto;
@@ -12,6 +13,7 @@ import ru.arsentiev.service.UserService;
 
 @SpringBootApplication
 @EnableJpaAuditing
+@EnableAsync
 public class ShorterApplication {
 
     public static void main(String[] args) {

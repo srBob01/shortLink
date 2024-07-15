@@ -24,7 +24,7 @@ public class Link {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "short_link")
+    @Column(name = "short_link", columnDefinition = "CHAR(7)")
     private String shortLink;
 
     @Column(name = "long_link")

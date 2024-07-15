@@ -49,6 +49,12 @@ public class User implements UserDetails, Principal {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Column(name = "enabled")
+    private boolean enabled;
+
+    @Column(name = "account_locked")
+    private boolean accountLocked;
+
     @CreatedDate
     @Column(nullable = false, updatable = false, name = "create_date")
     private LocalDateTime createdDate;
@@ -64,6 +70,26 @@ public class User implements UserDetails, Principal {
     private List<Link> links = new ArrayList<>();
 
     @Override
+    public String getName() {
+        return username;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(role);
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !accountLocked;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    @Override
     public boolean equals(Object object) {
         if (this == object) return true;
         if (!(object instanceof User user)) return false;
@@ -73,15 +99,5 @@ public class User implements UserDetails, Principal {
     @Override
     public int hashCode() {
         return Objects.hash(getId());
-    }
-
-    @Override
-    public String getName() {
-        return username;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(role);
     }
 }

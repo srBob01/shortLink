@@ -1,18 +1,57 @@
+springdoc:
+  default-produces-media-type: application/json
+
 spring:
-  application:
-    name: shorter
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 50MB
   datasource:
     url: jdbc:postgresql://localhost:5432/short_url
     username: postgres
     password: 112004
     driver-class-name: org.postgresql.Driver
   jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
     properties:
       hibernate:
-        show_sql: true
         format_sql: true
-    hibernate:
-      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: localhost
+    port: 1025
+    username: nik
+    password: nik
+    properties:
+      mail:
+        smtp:
+          trust: "*"
+        auth: true
+        starttls:
+          enabled: true
+        connectiontimeout: 5000
+        timeout: 3000
+        writetimeout: 5000
+application:
+  security:
+    jwt:
+      secret-key: 335a2eb7c5777acfd3f55fac87b3d0b12923912c676f109f3193cf90b65be0d8
+      expiration: 86400000
+      refresh-token:
+        expiration: 604800000
+  mailing:
+    length-code: 6
+    valid-code-minute: 30
+    frontend:
+      activation-url: http://localhost:4200/activate-account
+  file:
+    uploads:
+      photos-output-path: ./uploads
 server:
+  port: 8088
   servlet:
-    context-path: /api/v1
+    context-path: /api/v1/

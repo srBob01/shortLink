@@ -14,5 +14,7 @@ public interface UserRepository extends JpaRepository<User, Integer>,
         QuerydslPredicateExecutor<User> {
     Optional<User> findUserByUsername(String username);
 
+    Optional<User> findUserByEmail(String email);
+
     List<User> findAllByRoleOrderByUsernameDesc(Role role);
 }
