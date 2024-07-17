@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.arsentiev.service.UserService;
 
+import java.security.SecureRandom;
+
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
@@ -22,6 +24,11 @@ public class ApplicationConfig {
         authProvider.setUserDetailsService(userService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
+    }
+
+    @Bean
+    public SecureRandom secureRandom() {
+        return new SecureRandom();
     }
 
     @Bean

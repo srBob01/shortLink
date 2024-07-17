@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class UserReadDto {
+public class UserResponse {
     private Integer id;
     private String username;
     private String firstName;

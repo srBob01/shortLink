@@ -8,7 +8,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class CategoryReadDto {
+public class CategoryResponse {
     private Short id;
     private String title;
 }

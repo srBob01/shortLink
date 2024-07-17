@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class LinkReadDto {
+public class LinkResponse {
     private Long id;
     private String shortLink;
     private String longLink;

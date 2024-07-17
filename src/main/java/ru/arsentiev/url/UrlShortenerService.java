@@ -1,4 +1,4 @@
-package ru.arsentiev.service;
+package ru.arsentiev.url;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

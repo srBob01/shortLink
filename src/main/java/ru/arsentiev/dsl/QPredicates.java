@@ -20,7 +20,7 @@ public class QPredicates {
     }
 
     public <T> QPredicates add(T object, Function<T, Predicate> function) {
-        if (object != null) {
+        if (object != null && !object.toString().trim().isEmpty()) {
             predicates.add(function.apply(object));
         }
         return this;

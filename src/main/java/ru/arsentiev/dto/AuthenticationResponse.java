@@ -1,4 +1,4 @@
-package ru.arsentiev.auth;
+package ru.arsentiev.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

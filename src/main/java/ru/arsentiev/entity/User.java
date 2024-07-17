@@ -3,33 +3,25 @@ package ru.arsentiev.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.security.Principal;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @Getter
 @Setter
+@SuperBuilder
 @ToString
 @Entity
 @Table(name = "users")
-@EntityListeners(AuditingEntityListener.class)
-public class User implements UserDetails, Principal {
+public class User extends BaseEntity<Integer> implements UserDetails, Principal {
     @Serial
     private static final long serialVersionUID = 5888887312509702446L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
 
     @Column(nullable = false, unique = true)
     private String username;
@@ -54,14 +46,6 @@ public class User implements UserDetails, Principal {
 
     @Column(name = "account_locked")
     private boolean accountLocked;
-
-    @CreatedDate
-    @Column(nullable = false, updatable = false, name = "create_date")
-    private LocalDateTime createdDate;
-
-    @LastModifiedDate
-    @Column(insertable = false, name = "last_modified_date")
-    private LocalDateTime lastModifiedDate;
 
     @ToString.Exclude
     @JsonIgnore

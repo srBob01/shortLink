@@ -1,28 +1,21 @@
 package ru.arsentiev.page;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import org.springframework.data.domain.Page;
+import lombok.*;
 
 import java.util.List;
 
 
 @Getter
+@Setter
+@Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class PageResponse<T> {
-    List<T> content;
-    MetaData metaData;
-
-    public static <T> PageResponse<T> of(Page<T> page) {
-        var metaData = new MetaData(page.getNumber(), page.getSize(), page.getTotalElements());
-        return new PageResponse<>(page.getContent(), metaData);
-    }
-
-    @AllArgsConstructor
-    public static class MetaData {
-        int page;
-        int size;
-        long totalElements;
-    }
-
+    private List<T> content;
+    private int number;
+    private int size;
+    private long totalElements;
+    private int totalPages;
+    private boolean first;
+    private boolean last;
 }

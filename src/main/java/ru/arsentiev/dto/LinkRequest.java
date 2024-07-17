@@ -1,6 +1,7 @@
 package ru.arsentiev.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
@@ -10,13 +11,15 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class LinkWriteDto {
+public class LinkRequest {
     @NotBlank
+    @NotNull
     private String longLink;
     @NotBlank
+    @NotNull
     private String linkName;
-    private CategoryReadDto categoryDto;
-    private UserReadDto userDto;
+    @Positive
+    private Short idCategory;
     @Positive
     private int validHours;
 }

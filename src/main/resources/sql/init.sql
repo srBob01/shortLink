@@ -16,7 +16,7 @@ CREATE TABLE users
 CREATE TABLE category
 (
     id    SMALLSERIAL PRIMARY KEY,
-    title TEXT
+    title TEXT UNIQUE
 );
 
 CREATE TABLE links
@@ -25,9 +25,9 @@ CREATE TABLE links
     link_name          TEXT                 NOT NULL,
     short_link         CHAR(7) UNIQUE       NOT NULL,
     long_link          TEXT                 NOT NULL,
-    create_date        TIMESTAMP            NOT NULL DEFAULT now(),
+    create_date        TIMESTAMP            NOT NULL,
     last_modified_date TIMESTAMP,
-    remove_date        TIMESTAMP            NOT NULL DEFAULT now(),
+    remove_date        TIMESTAMP            NOT NULL,
     id_category        SMALLINT REFERENCES category (id)
         ON DELETE SET NULL ON UPDATE CASCADE,
     id_user            INT REFERENCES users (id)
@@ -37,7 +37,7 @@ CREATE TABLE links
 CREATE TABLE tokens
 (
     id           SERIAL PRIMARY KEY,
-    token        CHAR(6)                    NOT NULL,
+    token        CHAR(6) UNIQUE             NOT NULL,
     created_at   TIMESTAMP,
     expires_at   TIMESTAMP,
     validated_at TIMESTAMP,

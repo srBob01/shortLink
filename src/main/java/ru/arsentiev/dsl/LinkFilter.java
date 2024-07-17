@@ -1,4 +1,18 @@
 package ru.arsentiev.dsl;
 
-public record LinkFilter(String username, String email, String linkName, String titleCategory) {
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.*;
+
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Getter
+@Setter
+@ToString
+public class LinkFilter {
+    private String username;
+    private String email;
+    private String linkName;
+    private String titleCategory;
 }

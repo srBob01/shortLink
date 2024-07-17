@@ -1,36 +1,39 @@
-package ru.arsentiev.auth;
+package ru.arsentiev.service;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import ru.arsentiev.configuration.JwtService;
+import ru.arsentiev.dto.AuthenticationResponse;
+import ru.arsentiev.dto.UserAuthenticationRequest;
+import ru.arsentiev.dto.UserRegisterRequest;
 import ru.arsentiev.email.EmailService;
 import ru.arsentiev.email.EmailTemplateName;
 import ru.arsentiev.entity.Token;
 import ru.arsentiev.entity.User;
-import ru.arsentiev.mappers.RegisterRequestMapper;
+import ru.arsentiev.mappers.UserRegisterRequestMapper;
 import ru.arsentiev.repository.TokenRepository;
 import ru.arsentiev.repository.UserRepository;
 
 import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
-    private final RegisterRequestMapper registerRequestMapper;
+    private final UserRegisterRequestMapper userRegisterRequestMapper;
     private final UserRepository userRepository;
     private final TokenRepository tokenRepository;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
+    private final SecureRandom secureRandom;
     @Value("${application.mailing.length-code}")
     public int lengthCode;
     @Value("${application.mailing.valid-code-minute}")
@@ -39,11 +42,9 @@ public class AuthenticationService {
     private String activationUrl;
     public final String DIGITS = "0123456789";
 
-    public void register(RegisterRequest request) throws MessagingException {
-        User user = Optional.of(request)
-                .map(registerRequestMapper::reqToUser)
-                .map(userRepository::save)
-                .orElseThrow();
+    public void register(UserRegisterRequest request) throws MessagingException {
+        User user = userRegisterRequestMapper.reqToUser(request);
+        userRepository.save(user);
         sendValidationEmail(user);
     }
 
@@ -61,7 +62,11 @@ public class AuthenticationService {
     }
 
     private String generateAndSaveActivationToken(User user) {
-        String generatedToken = generateActivationCode(lengthCode);
+        String generatedToken;
+        do {
+            generatedToken = generateActivationCode(lengthCode);
+        } while (tokenRepository.existsByToken(generatedToken));
+
         var token = Token.builder()
                 .token(generatedToken)
                 .createdAt(LocalDateTime.now())
@@ -73,19 +78,10 @@ public class AuthenticationService {
     }
 
     private String generateActivationCode(int length) {
-        StringBuilder codeBuilder = new StringBuilder();
-
-        SecureRandom secureRandom = new SecureRandom();
-
-        for (int i = 0; i < length; i++) {
-            int randomIndex = secureRandom.nextInt(DIGITS.length());
-            codeBuilder.append(DIGITS.charAt(randomIndex));
-        }
-
-        return codeBuilder.toString();
+        return RandomStringUtils.randomAlphanumeric(length);
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(UserAuthenticationRequest request) {
         var auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(), request.getPassword()
@@ -93,7 +89,7 @@ public class AuthenticationService {
         );
         var claims = new HashMap<String, Object>();
         var user = ((User) auth.getPrincipal());
-        claims.put("username", user.getUsername());
+        claims.put("email", user.getEmail());
         var jwtToken = jwtService.generateToken(claims, user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -101,18 +97,22 @@ public class AuthenticationService {
     }
 
     public void activateAccount(String token) throws MessagingException {
+
         Token savedToken = tokenRepository.findByToken(token)
                 .orElseThrow(() -> new RuntimeException("Invalid token"));
+
         if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
             sendValidationEmail(savedToken.getUser());
-            throw new RuntimeException("Activation token has expired. A new token has been send to the enail");
+            throw new RuntimeException("Activation token has expired. A new token has been sent to the email");
         }
+
         var user = userRepository.findById(savedToken.getUser().getId())
-                .orElseThrow(() -> new UsernameNotFoundException
-                        ("User " + savedToken.getUser().getId() + " not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User " + savedToken.getUser().getId() + " not found"));
+
         user.setEnabled(true);
-        userRepository.save(user);
+        userRepository.saveAndFlush(user);
+
         savedToken.setValidatedAt(LocalDateTime.now());
-        tokenRepository.save(savedToken);
+        tokenRepository.saveAndFlush(savedToken);
     }
 }
