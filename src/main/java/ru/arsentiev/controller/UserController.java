@@ -14,7 +14,7 @@ import ru.arsentiev.page.PageResponse;
 import ru.arsentiev.service.UserService;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("users")
 @RequiredArgsConstructor
 @Tag(name = "User")
 public class UserController {
@@ -53,7 +53,7 @@ public class UserController {
     public ResponseEntity<PageResponse<UserResponse>> findAllUsersByFilter(
             @RequestParam(name = "page", defaultValue = "0", required = false) int page,
             @RequestParam(name = "size", defaultValue = "10", required = false) int size,
-            @RequestBody @Valid UserFilter filter
+            @RequestBody UserFilter filter
     ) {
         return ResponseEntity.ok(userService.findAllUserByFilter(page, size, filter));
     }

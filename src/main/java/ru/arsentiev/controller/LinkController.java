@@ -14,7 +14,7 @@ import ru.arsentiev.page.PageResponse;
 import ru.arsentiev.service.LinkService;
 
 @RestController
-@RequestMapping("/api/links")
+@RequestMapping("links")
 @RequiredArgsConstructor
 @Tag(name = "Link")
 public class LinkController {

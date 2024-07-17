@@ -14,7 +14,7 @@ import ru.arsentiev.dto.UserRegisterRequest;
 import ru.arsentiev.service.AuthenticationService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("auth")
 @RequiredArgsConstructor
 @Tag(name = "Authentication")
 public class AuthenticationController {

@@ -2,6 +2,7 @@ package ru.arsentiev.service;
 
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,6 +25,8 @@ import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -34,21 +37,25 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final EmailService emailService;
     private final SecureRandom secureRandom;
+
     @Value("${application.mailing.length-code}")
     public int lengthCode;
+
     @Value("${application.mailing.valid-code-minute}")
     public int validCodeMinute;
+
     @Value("${application.mailing.frontend.activation-url}")
     private String activationUrl;
-    public final String DIGITS = "0123456789";
 
     public void register(UserRegisterRequest request) throws MessagingException {
+        log.info("Registering user with email: {}", request.getEmail());
         User user = userRegisterRequestMapper.reqToUser(request);
         userRepository.save(user);
         sendValidationEmail(user);
     }
 
     private void sendValidationEmail(User user) throws MessagingException {
+        log.info("Sending validation email to user with email: {}", user.getEmail());
         var newToken = generateAndSaveActivationToken(user);
         emailService.sendEmail(
                 user.getEmail(),
@@ -57,11 +64,11 @@ public class AuthenticationService {
                 activationUrl,
                 newToken,
                 "Account activation"
-
         );
     }
 
     private String generateAndSaveActivationToken(User user) {
+        log.info("Generating activation token for user with email: {}", user.getEmail());
         String generatedToken;
         do {
             generatedToken = generateActivationCode(lengthCode);
@@ -82,6 +89,7 @@ public class AuthenticationService {
     }
 
     public AuthenticationResponse authenticate(UserAuthenticationRequest request) {
+        log.info("Authenticating user with email: {}", request.getEmail());
         var auth = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(), request.getPassword()
@@ -97,22 +105,30 @@ public class AuthenticationService {
     }
 
     public void activateAccount(String token) throws MessagingException {
-
+        log.info("Activating account with token: {}", token);
         Token savedToken = tokenRepository.findByToken(token)
-                .orElseThrow(() -> new RuntimeException("Invalid token"));
+                .orElseThrow(() -> {
+                    log.error("Invalid token: {}", token);
+                    return new RuntimeException("Invalid token");
+                });
 
         if (LocalDateTime.now().isAfter(savedToken.getExpiresAt())) {
+            log.warn("Activation token has expired: {}", token);
             sendValidationEmail(savedToken.getUser());
             throw new RuntimeException("Activation token has expired. A new token has been sent to the email");
         }
 
         var user = userRepository.findById(savedToken.getUser().getId())
-                .orElseThrow(() -> new UsernameNotFoundException("User " + savedToken.getUser().getId() + " not found"));
+                .orElseThrow(() -> {
+                    log.error("User not found with id: {}", savedToken.getUser().getId());
+                    return new UsernameNotFoundException("User " + savedToken.getUser().getId() + " not found");
+                });
 
         user.setEnabled(true);
         userRepository.saveAndFlush(user);
 
         savedToken.setValidatedAt(LocalDateTime.now());
         tokenRepository.saveAndFlush(savedToken);
+        log.info("Account activated for user with email: {}", user.getEmail());
     }
 }

@@ -2,6 +2,7 @@ package ru.arsentiev.handler;
 
 import jakarta.mail.MessagingException;
 import jakarta.persistence.EntityNotFoundException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
@@ -17,10 +18,12 @@ import java.util.Set;
 import static org.springframework.http.HttpStatus.*;
 import static ru.arsentiev.handler.ErrorCode.*;
 
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     @ExceptionHandler(LockedException.class)
     public ResponseEntity<ExceptionResponse> handleException(LockedException exception) {
+        log.error("LockedException: {}", exception.getMessage());
         return ResponseEntity
                 .status(UNAUTHORIZED)
                 .body(
@@ -34,6 +37,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DisabledException.class)
     public ResponseEntity<ExceptionResponse> handleException(DisabledException exception) {
+        log.error("DisabledException: {}", exception.getMessage());
         return ResponseEntity
                 .status(UNAUTHORIZED)
                 .body(
@@ -47,6 +51,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<ExceptionResponse> handleException(BadCredentialsException exception) {
+        log.error("BadCredentialsException: {}", exception.getMessage());
         return ResponseEntity
                 .status(UNAUTHORIZED)
                 .body(
@@ -60,6 +65,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MessagingException.class)
     public ResponseEntity<ExceptionResponse> handleException(MessagingException exception) {
+        log.error("MessagingException: {}", exception.getMessage());
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
                 .body(
@@ -71,6 +77,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ExceptionResponse> handleException(MethodArgumentNotValidException exception) {
+        log.error("MethodArgumentNotValidException: {}", exception.getMessage());
         Set<String> errors = new HashSet<>();
         exception.getBindingResult().getAllErrors()
                 .forEach(error -> {
@@ -88,6 +95,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(SecurityException.class)
     public ResponseEntity<ExceptionResponse> handleException(SecurityException exception) {
+        log.error("SecurityException: {}", exception.getMessage());
         return ResponseEntity
                 .status(FORBIDDEN)
                 .body(
@@ -101,8 +109,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ExceptionResponse> handleException(Exception exception) {
-        // todo log
-        exception.printStackTrace();
+        log.error("Exception: {}", exception.getMessage(), exception);
         return ResponseEntity
                 .status(INTERNAL_SERVER_ERROR)
                 .body(
@@ -115,6 +122,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(UsernameNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleException(UsernameNotFoundException exception) {
+        log.error("UsernameNotFoundException: {}", exception.getMessage());
         return ResponseEntity
                 .status(NOT_FOUND)
                 .body(
@@ -126,9 +134,9 @@ public class GlobalExceptionHandler {
                 );
     }
 
-
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ExceptionResponse> handleException(EntityNotFoundException exception) {
+        log.error("EntityNotFoundException: {}", exception.getMessage());
         return ResponseEntity
                 .status(NOT_FOUND)
                 .body(
